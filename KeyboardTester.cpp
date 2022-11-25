@@ -66,8 +66,3 @@ void PrintLocaleId(unsigned value, TCHAR* buf)
 {
     if (!LCIDToLocaleName(value, buf, LOCALE_NAME_MAX_LENGTH, LOCALE_ALLOW_NEUTRAL_NAMES)) wsprintf(buf, L"0x%04X", value);
 }
-
-//bool Allowed(HKL layout)
-//{
-//    return (int)layout == 0x04091809 || (int)layout == 0xf0a80422;
-//}
