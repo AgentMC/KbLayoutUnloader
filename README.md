@@ -22,6 +22,8 @@ This version is improved version of that original code, and can be used in 2 way
 1. Launch the application without a command line to list the system-wide loaded layouts.
 2. Launch the application again specifying those layouts (IDs, hexadecimal, with 0x or without it, space separated) in the command line that you *want to preserve* (white-list). The tool will remove everything else.
 
+To use compiled binaries (https://github.com/AgentMC/KbLayoutUnloader/releases/tag/v.1.0.0), you need MS C++ 2022 (14.0) runtime: https://aka.ms/vs/17/release/vc_redist.x86.exe (but highly likely you already have this installed).
+
 ## Notes
 
 Windows 11 seems to have some improvements in the sense that despite there seems to always be "ghost" keyboard(s) loaded, they (normally) do not appear in the language switcher list. If they do, you can still use the tool. Also when they do, they then suddenly self-dissolve 🤯
