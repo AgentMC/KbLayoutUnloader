@@ -32,4 +32,4 @@ The tool tries to do it's best to detect the locales to present the information 
 
 ## Compilation
 
-Be sure to build in 32-bit (x86)! The HKL's high 16 bits seem to be affected by something in the system that looks like a bug to me where there is a negative top 8 bits. This screws x64 version massively, so I did not bother to fix the math. x64 is compiled but may or may not work. It may unload all your keyboards FWIW. Or work flawlessly. So in short - do not compile as x64.
+I fixed x64 version as well, so the latest version compiles fine in x64. Just open in VS Community or higher, and do build.
