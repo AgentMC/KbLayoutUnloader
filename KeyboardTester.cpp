@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <Windows.h>
 #include <set>
 #include <tchar.h>
@@ -8,7 +9,7 @@ void PrintLocaleId(unsigned value, TCHAR* buf);
 int _tmain(int argc, TCHAR** argv)
 {
     std::wcout << "--== Keyboard Layout Unloader ==--\n";
-    std::set<int> allowed;
+    std::set<unsigned> allowed;
     for (int i = 1; i < argc; i++) 
     {
         allowed.insert(_tcstoul(argv[i], nullptr, 16));
@@ -27,39 +28,38 @@ int _tmain(int argc, TCHAR** argv)
     auto layout = &buffer[0], locale = layout + LOCALE_NAME_MAX_LENGTH;
     for (int i = 0; i < localesCount; i++) 
     {
-        auto l = layouts[i];
-        PrintLocaleId((unsigned)l >> 16, layout);
-        PrintLocaleId((unsigned)l & 0xFFFF, locale);
+        auto l = (unsigned)(unsigned long long)layouts[i];
+        PrintLocaleId(l >> 16, layout);
+        PrintLocaleId(l & 0xFFFF, locale);
+        std::wcout << L"0x" << std::setfill(L'0') << std::setw(8) << std::uppercase << std::hex << l << std::nouppercase << L" - KB layout " << layout << L" in language " << locale;
         if (allowed.size() > 0) 
         {
-            std::wcout << std::hex << "0x" << l << " - KB layout " << layout << " in language " << locale << (allowed.find((int)l) != allowed.end() ? ", " : ", not ") << "allowed.\n";
+            std::wcout << (allowed.find(l) != allowed.end() ? L", " : L", not ") << L"allowed.";
         }
-        else
-        {
-            std::wcout << std::hex << "0x" << l << " - KB layout " << layout << " in language " << locale << "\n";
-        }
+        std::wcout << "\n";
     }
 
     if (allowed.size() > 0)
     {
-        std::wcout << "Unloading not allowed...\n";
+        std::wcout << L"Unloading all except those allowed in the command line...\n";
 
         for (int i = localesCount - 1; i >= 0; i--)
         {
             auto l = layouts[i];
-            if (allowed.find((int)l) == allowed.end())
+            auto lx86 = (unsigned)(unsigned long long)l;
+            if (allowed.find(lx86) == allowed.end())
             {
                 auto x = UnloadKeyboardLayout(l);
-                std::wcout << std::hex << "0x" << l << " unloaded with result: " << (x ? "OK" : "FAILED") << "\n";
+                std::wcout << L"0x" << std::uppercase << lx86 << std::nouppercase << L" unloaded with result: " << (x ? L"OK" : L"FAILED") << L"\n";
             }
         }
     }
     else
     {
-        std::wcout << "Tool launched in read-only mode. Supply hexadecimal IDs in command line to whitelist (with 0x or without).\n";
+        std::wcout << L"Tool launched in read-only mode. Supply hexadecimal IDs (space-separated) in command line to whitelist (with 0x or without).\n";
     }
 
-    std::wcout << "Done.";
+    std::wcout << L"--== Done ==--\n";
 }
 
 void PrintLocaleId(unsigned value, TCHAR* buf) 

@@ -6,3 +6,5 @@
 /Debug
 /Release
 *.user
+/KeyboardTester
+/x64/Debug
